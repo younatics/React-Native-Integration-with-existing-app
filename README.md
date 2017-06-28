@@ -7,7 +7,7 @@ Thanks.
 ## Develop Enviroment
 This document is based on below version. React Native currenly changes a lot, so be careful.
 
-```
+```javascript
 "dependencies": {
 		"react": "16.0.0-alpha.12",
 		"react-native": "0.45.1"
@@ -30,7 +30,7 @@ If you all done this process, init your project.
 ```
 react-native init ReactProject
 ```
-In your `ReactProject` directoty, you can find `package.json`. this sould be look like this.
+In your `ReactProject` directory, you can find `package.json`. this should be look like this.
 ```javascript
 {
 	"name": "ReactProject",
@@ -86,5 +86,13 @@ In your `ReactProject` directoty, you can find `package.json`. this sould be loo
 ```
 Currently, RN 0.45.1 have a problem in `iOS - #import <RCTAnimation\\/RCTValueAnimatedNode.h>`. You need to change it to `#import "RCTValueAnimatedNode.h`. So use `postinstall`
 
-### Step 3. 
+### Step 3. `Git clone` your `iOS` and `Android` Project
+Main purpose of this step is to make structure for cofiguration management. You can just copy and paste to `/android` directory and `/iOS` directory. or `git clone` to make below srtucture.
+```
+[React native repository] 
+|
+|- /android [Android repository]
+|- /ios [iOS repository]
+```
+
 

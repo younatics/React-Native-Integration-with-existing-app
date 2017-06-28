@@ -16,7 +16,7 @@ This document is based on below version. React Native currenly changes a lot, so
 If you have `iOS` and `Android` application independently, this will be perfect guide for you. Please follow these steps.
 
 ## Getting started
-
+---
 ### Step 1. Install tools and init project 
 #### Install tools
 you can also see this in [Getting Started](http://facebook.github.io/react-native/releases/next/docs/getting-started.html)
@@ -56,8 +56,9 @@ In your `ReactProject` directory, you can find `package.json`. this should be lo
 }
 ```
 
-> you can not use `expo` when you integrate with exisiting apps.
+> you can't use `expo` when you integrate with exisiting apps.
 
+---
 ### Step 2. Add `postinstall` in `package.json`
 ```javascript
 {
@@ -86,6 +87,7 @@ In your `ReactProject` directory, you can find `package.json`. this should be lo
 ```
 Currently, RN 0.45.1 have a problem in `iOS - #import <RCTAnimation\\/RCTValueAnimatedNode.h>`. You need to change it to `#import "RCTValueAnimatedNode.h`. So use `postinstall`
 
+---
 ### Step 3. `Git clone` your `iOS` and `Android` Project
 Main purpose of this step is to make structure for cofiguration management. You can just copy and paste to `/android` directory and `/iOS` directory. or `git clone` to make below srtucture.
 ```

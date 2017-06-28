@@ -103,17 +103,17 @@ You can do easily beacuse iOS depedency tool is `cocoapods`. Add libraries in `P
 #React Native
 pod 'React', :path => '../node_modules/react-native', :subspecs => [
 	'Core',
-    'RCTText',
-    'RCTNetwork',
-    'RCTImage',
-    'RCTWebSocket',
-    'DevSupport',
-    'BatchedBridge',
-    'RCTAnimation'
+	'RCTText',
+	'RCTNetwork',
+	'RCTImage',
+	'RCTWebSocket',
+	'DevSupport',
+	'BatchedBridge',
+	'RCTAnimation'
 ]
 pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
 ```
-Make `UIViewController` to present `React native view`
+Make `UIViewController` to present `React Native view`
 ```Swift
 import UIKit
 import React
@@ -138,7 +138,7 @@ class ReactViewController: UIViewController, ZBAnSimPopupDelegate {
     }
 }
 ```
-Add `React Bridge` to communicate with `index.ios.js` <-> `UIViewController`
+Add `React Bridge` to communicate with `index.ios.js` <-> `UIViewController`. `forHotReloading` flag is for compile bundle or localhost. 
 ```Swift
 let localUrl = "http://localhost:8081/index.ios.bundle?platform=ios&dev=true"
 let forHotReloading = false

@@ -16,7 +16,6 @@ This document is based on below version. React Native currenly changes a lot, so
 If you have `iOS` and `Android` application independently, this will be perfect guide for you. Please follow these steps.
 
 ## Getting started
----
 ### Step 1. Install tools and init project 
 #### Install tools
 you can also see this in [Getting Started](http://facebook.github.io/react-native/releases/next/docs/getting-started.html)
@@ -97,4 +96,83 @@ Main purpose of this step is to make structure for cofiguration management. You 
 |- /ios [iOS repository]
 ```
 
+---
+### Step4. Modify `iOS` project
+You can do easily beacuse iOS depedency tool is `cocoapods`. Add libraries in `Podfile` and `pod install`
+```ruby
+#React Native
+pod 'React', :path => '../node_modules/react-native', :subspecs => [
+	'Core',
+    'RCTText',
+    'RCTNetwork',
+    'RCTImage',
+    'RCTWebSocket',
+    'DevSupport',
+    'BatchedBridge',
+    'RCTAnimation'
+]
+pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+```
+Make `UIViewController` to present `React native view`
+```Swift
+import UIKit
+import React
+import SnapKit
+
+class ReactViewController: UIViewController, ZBAnSimPopupDelegate {
+    var reactView: RCTRootView!
+	var item_id: Int?
+
+    override func loadView() {
+        super.loadView()
+        
+        guard let id = item_id else { return }
+        let mockData = ["item_id": "\(id)"]
+        
+        self.reactView = ReactBridge.shared.viewForModule("ReactProject", initialProperties: mockData)
+        self.view.addSubview(self.reactView)
+        
+        self.reactView.snp.makeConstraints { (m) in
+            m.edges.equalTo(self.view)
+        }
+    }
+}
+```
+Add `React Bridge` to communicate with `index.ios.js` <-> `UIViewController`
+```Swift
+let localUrl = "http://localhost:8081/index.ios.bundle?platform=ios&dev=true"
+let forHotReloading = false
+
+class ReactBridge: NSObject {
+    static let shared = ReactBridge()
+}
+extension ReactBridge: RCTBridgeDelegate {
+    func sourceURL(for bridge: RCTBridge!) -> URL! {
+        return URL(string: localUrl)
+    }
+    
+    func createBridgeIfNeeded() -> RCTBridge {
+        let bridge = RCTBridge.init(delegate: self, launchOptions: nil)
+        return bridge ?? RCTBridge()
+    }
+    
+    func viewForModule(_ moduleName: String, initialProperties: [String : Any]?) -> RCTRootView {
+        if forHotReloading {
+            let viewBridge = createBridgeIfNeeded()
+            let rootView: RCTRootView = RCTRootView(
+                bridge: viewBridge,
+                moduleName: moduleName,
+                initialProperties: initialProperties)
+            return rootView
+        } else {
+            if let iosBundle = Bundle.main.url(forResource: "main", withExtension: "jsbundle") {
+                guard let bundleRootView = RCTRootView(bundleURL: iosBundle, moduleName: moduleName, initialProperties: initialProperties, launchOptions: nil) else { return RCTRootView() }
+                return bundleRootView
+            }
+        }
+        return RCTRootView()
+    }
+}
+
+```
 

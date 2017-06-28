@@ -1,27 +1,37 @@
 # React Native [0.45.1] Intergrating with existing apps
 
 ## Purpose
-This repository is made for React Natvie users who want to integrate `RN[0.45.1]` to exisiting application. [Official document](http://facebook.github.io/react-native/releases/next/docs/integration-with-existing-apps.html#integration-with-existing-apps) is well documented, but I want to make it more easily. This document is tested recently. Feel free to make Pull Request.
+This repository is made for React Natvie users who want to integrate RN[0.45.1] to exisiting application. [Integration with existing apps](http://facebook.github.io/react-native/releases/next/docs/integration-with-existing-apps.html#integration-with-existing-apps) is well documented, but I want to make it more easily. This document is tested recently. Feel free to make Pull Request.
 Thanks.
 
 ## Develop Enviroment
+This document is based on below version. React Native currenly changes a lot, so be careful.
+
 ```
 "dependencies": {
 		"react": "16.0.0-alpha.12",
 		"react-native": "0.45.1"
 	}
 ```
+If you have `iOS` and `Android` application independently, this will be perfect guide for you. Please follow these steps.
+
 ## Getting started
 
-#### Step 1. Install tools and init project 
-##### Install tools
-`brew install node`
-`brew install watchman`
-`npm install -g react-native-cli`
-If you all done this process init your project.
-`react-native init ReactProject`
-In your `ReactProject` directoty, you can find `package.json`. this sould be look like this.
+### Step 1. Install tools and init project 
+#### Install tools
+you can also see this in [Getting Started](http://facebook.github.io/react-native/releases/next/docs/getting-started.html)
 ```
+brew install node
+brew install watchman
+npm install -g react-native-cli
+```
+
+If you all done this process, init your project.
+```
+react-native init ReactProject
+```
+In your `ReactProject` directoty, you can find `package.json`. this sould be look like this.
+```javascript
 {
 	"name": "ReactProject",
 	"version": "0.0.1",
@@ -46,8 +56,10 @@ In your `ReactProject` directoty, you can find `package.json`. this sould be loo
 }
 ```
 
-#### Step 2.Add `postinstall` in `package.json`
-```
+> you can not use `expo` when you integrate with exisiting apps.
+
+### Step 2. Add `postinstall` in `package.json`
+```javascript
 {
 	"name": "ReactProject",
 	"version": "0.0.1",
@@ -72,5 +84,7 @@ In your `ReactProject` directoty, you can find `package.json`. this sould be loo
 	}
 }
 ```
-Currently, RN 0.45.1 have some problem in `iOS - #import <RCTAnimation\\/RCTValueAnimatedNode.h>`. Yu need to change it to `#import "RCTValueAnimatedNode.h`. So use `postinstall`
+Currently, RN 0.45.1 have a problem in `iOS - #import <RCTAnimation\\/RCTValueAnimatedNode.h>`. You need to change it to `#import "RCTValueAnimatedNode.h`. So use `postinstall`
+
+### Step 3. 
 

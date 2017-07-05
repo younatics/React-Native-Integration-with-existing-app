@@ -97,7 +97,7 @@ Main purpose of this step is to make structure for cofiguration management. You 
 ```
 
 ---
-### Step4. Modify `iOS` project
+### Step4. Modify iOS project
 You can do easily beacuse iOS depedency tool is `cocoapods`. Add libraries in `Podfile` and `pod install`
 ```ruby
 #React Native
@@ -173,6 +173,39 @@ extension ReactBridge: RCTBridgeDelegate {
         return RCTRootView()
     }
 }
-
 ```
+Add `ReactManager.swift` to call method with `Native` <-> `React-Native`
+```Swift
+@objc(ReactManager) class ReactManager: NSObject {
+    var bridge: RCTBridge!
+    
+    @objc func back(_ reactTag: NSNumber) {
+        DispatchQueue.main.async {
+            if let view = self.bridge.uiManager.view(forReactTag: reactTag) {
+                let presentedViewController = view.reactViewController()
+                presentedViewController?.navigationController?.pop(animated: true)
+            }
+        }
+    }
+}    
+```
+We need addtional `Objective-C file` beacuse `React` use macro. Add `ReactManagerBridge.m` file like this
+```Swift
+#import "ReactManagerBridge.h"
+#import "zigbang-Swift.h"
+
+@implementation ReactManagerBridge
+
+RCT_EXPORT_MODULE(ReactManager);
+
+RCT_EXPORT_METHOD(back:(nonnull NSNumber *)reactTag) {
+    ReactManager* reactManager = [[ReactManager alloc] init];
+    reactManager.bridge = _bridge;
+    [reactManager back:reactTag];
+
+}
+@end
+```
+
+Done!
 

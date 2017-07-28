@@ -209,3 +209,38 @@ RCT_EXPORT_METHOD(back:(nonnull NSNumber *)reactTag) {
 
 Done!
 
+---
+### Step4. Modify Android project
+
+add dependency in `build.gradle`
+
+```
+allprojects {
+    repositories {
+        mavenLocal()
+        jcenter()
+        maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url "$rootDir/../node_modules/react-native/android"
+        }
+    }
+}
+```
+in your `app.gradle`. I added `exclude` becuase it conflict with  exisiting dependecies
+
+
+```
+    compile ("com.facebook.react:react-native:+") {
+        exclude group:'com.facebook.stetho', module:'stetho'
+    }
+
+```
+
+Add `ReactInstanceManager` to use it in `React Native`. I recommand to make instance in `Mainapplication` becuase it takes some time to generate instance
+
+```Java
+
+
+```
+
+

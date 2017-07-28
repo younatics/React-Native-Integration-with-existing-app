@@ -207,8 +207,6 @@ RCT_EXPORT_METHOD(back:(nonnull NSNumber *)reactTag) {
 @end
 ```
 
-Done!
-
 ---
 ### Step4. Modify Android project
 
@@ -239,8 +237,78 @@ in your `app.gradle`. I added `exclude` becuase it conflict with  exisiting depe
 Add `ReactInstanceManager` to use it in `React Native`. I recommand to make instance in `Mainapplication` becuase it takes some time to generate instance
 
 ```Java
+    public static ReactInstanceManager react;
 
+
+	this.react = ReactInstanceManager.builder()
+                .setApplication(this)
+                .setBundleAssetName("index.android.bundle")
+                .setJSMainModuleName("index.android")
+                .addPackage(new MainReactPackage())
+                .addPackage(new ReactManagerBridge())
+                .setUseDeveloperSupport(BuildConfig.DEBUG)
+                .setInitialLifecycleState(LifecycleState.RESUMED)
+                .build();
+```
+
+Modify your `ReactRootView` where you want to use. Also add props to pass parameter
+```Java
+    @BindView(R.id.container)
+    ReactRootView container;
+    
+	react = MainApplication.react;
+
+	Bundle props = new Bundle();
+	props.putString("items", new Gson().toJson(response));
+	container.startReactApplication(react, "ReactProject", props);
 
 ```
+
+Add bridge to communicate with Native
+
+```Java
+class ReactManagerBridge() : ReactPackage {
+
+    override fun createJSModules(): List<Class<out JavaScriptModule>> {
+        return emptyList()
+    }
+
+    override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
+        val modules = ArrayList<ViewManager<*, *>>()
+        return modules
+    }
+
+    override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
+        val modules = ArrayList<NativeModule>()
+
+        modules.add(ReactManager(reactContext))
+        return modules
+    }
+
+}
+```
+
+Add reactmanager to call method
+
+```Java
+class ReactManager(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+
+    fun ReactManager(reactContext: ReactApplicationContext) {
+        super.getReactApplicationContext()
+    }
+
+    override fun getName(): String {
+        return "ReactManager"
+    }
+
+    @ReactMethod
+    fun alert(message: String) {
+        Toast.makeText(getReactApplicationContext(), message, Toast.LENGTH_LONG).show()
+    }
+}
+```
+
+This is all about setting your react native to exisiting application!
+
 
 
